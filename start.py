@@ -15,7 +15,7 @@ async def getUserVideos(username):
         await api.create_sessions(ms_tokens=[ms_token], num_sessions=1, sleep_after=3, headless=False, override_browser_args=["--incognito"])
         user = api.user(username)
         # user_data = await user.info()
-        async for video in user.videos(count=10):
+        async for video in user.videos(count=100):
             videos.append(video.as_dict)
     return videos
 
