@@ -5,7 +5,7 @@ from TikTokApi import TikTokApi
 from datetime import datetime
 
 ms_token = os.environ.get(
-    "ms_token", "token"
+    "ms_token", "ORFA0T-vXwoJBPWBde1qTGYRFTLRUcBUJxA3BTFcj6uJLtlWu0NqHYBhJ9mB_OK2ZoJmoyQR9eATAF99wJ3xz4od9ycdVOeh61ibE6Lo13Y5M9fCUjqlzGJUH7uiqG80erMGqVS3EFB0bSa0"
 )  # set your own ms_token, think it might need to have visited a profile
 
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     videos = asyncio.run(getUserVideos(username))
 
     with open('tiktok_videos.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['VideoURL', 'Description', 'Likes', 'Shares', 'Comments', 'Views', 'Saves']
+        fieldnames = ['Date', 'Description', 'Likes', 'Shares', 'Comments', 'Views', 'Saves', 'VideoURL']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
     
@@ -47,15 +47,14 @@ if __name__ == "__main__":
             videoInfo = asyncio.run(getVideoInfo(username, video))
             videoUrl = tiktokUrlBuilder(username, video['id'])
             writer.writerow({
-                'Date': convertTimestampToDate(videoInfo['createTime']),
+                'Date': convertTimestampToDate(int(videoInfo['createTime'])),
                 'Description': videoInfo['desc'],
                 'Likes': videoInfo['stats']['diggCount'],
                 'Shares': videoInfo['stats']['shareCount'],
                 'Comments': videoInfo['stats']['commentCount'],
                 'Views': videoInfo['stats']['playCount'],
                 'Saves': videoInfo['stats']['collectCount'],
-                'VideoURL': videoUrl,
-                
+                'VideoURL': videoUrl
             })
 
     # for video in videos:
