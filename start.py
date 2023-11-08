@@ -1,11 +1,11 @@
-import json
-from TikTokApi import TikTokApi
 import asyncio
 import os
 import csv
+from TikTokApi import TikTokApi
+from datetime import datetime
 
 ms_token = os.environ.get(
-    "ms_token", "BO0Syd27_lBkcSmiD3V6XO-hHN2Ecj0-DnEKXbDunPrf-03Bjw7P3IrMrO-P47xLUSVJY3PZ5KcqFjtJg-rqRgZUwa7RQBJIc9YH1C1VmLv8MoEbgH5VHPDdM-e2wJyUVCtkBw=="
+    "ms_token", "token"
 )  # set your own ms_token, think it might need to have visited a profile
 
 
@@ -22,6 +22,10 @@ async def getUserVideos(username):
 
 def tiktokUrlBuilder(username, videoID):
     return f"https://www.tiktok.com/@{username}/video/{videoID}"
+
+def convertTimestampToDate(timestamp):
+    return datetime.fromtimestamp(timestamp).strftime('%d/%m/%Y')
+
 
 
 async def getVideoInfo(username, video):
@@ -45,13 +49,15 @@ if __name__ == "__main__":
             videoInfo = asyncio.run(getVideoInfo(username, video))
             videoUrl = tiktokUrlBuilder(username, video['id'])
             writer.writerow({
-                'VideoURL': videoUrl,
+                'Date': convertTimestampToDate(videoInfo['createTime']),
                 'Description': videoInfo['desc'],
                 'Likes': videoInfo['stats']['diggCount'],
                 'Shares': videoInfo['stats']['shareCount'],
                 'Comments': videoInfo['stats']['commentCount'],
                 'Views': videoInfo['stats']['playCount'],
-                'Saves': videoInfo['stats']['collectCount']
+                'Saves': videoInfo['stats']['collectCount'],
+                'VideoURL': videoUrl,
+                
             })
 
     # for video in videos:
