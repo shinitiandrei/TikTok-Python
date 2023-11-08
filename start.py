@@ -26,8 +26,6 @@ def tiktokUrlBuilder(username, videoID):
 def convertTimestampToDate(timestamp):
     return datetime.fromtimestamp(timestamp).strftime('%d/%m/%Y')
 
-
-
 async def getVideoInfo(username, video):
     videoUrl = tiktokUrlBuilder(username, video['id'])
     async with TikTokApi() as api:
